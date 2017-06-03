@@ -10,11 +10,14 @@ class AdminCategories extends Component {
 
     this.state = {
       categories: [],
+      category: null,
       status: 'init',
       error: null,
       showModal: false,
       selected: false
     };
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -45,6 +48,13 @@ class AdminCategories extends Component {
       });
   }
 
+  handleSave(category) {
+    const { category } = this.state;
+    category.id ? this.update(category) : this.save(category);
+  }
+
+  save(category) {}
+
   removeCategory(category) {}
 
   updateCategory(category) {}
@@ -64,9 +74,16 @@ class AdminCategories extends Component {
     }));
   }
 
+  handleChange(event) {
+    console.log('handleChange AFUERA', event);
+    this.setState(prevState => ({
+      label: event.target.value
+    }));
+  }
+
   render() {
     const { categories, status, error, showModal, selected } = this.state;
-
+    console.log(this.state.label);
     return (
       <Grid>
         <PageHeader>
@@ -89,7 +106,13 @@ class AdminCategories extends Component {
           {status === 'success' && <CategoriesList items={categories} />}
         </Row>
 
-        <CategoryModal onCancel={() => this.hideModal()} show={showModal} selected={selected} />
+        <CategoryModal
+          onCancel={() => this.hideModal()}
+          show={showModal}
+          selected={selected}
+          handleChange={this.handleChange}
+          saveCategory={this.saveCAtegory}
+        />
       </Grid>
     );
   }
